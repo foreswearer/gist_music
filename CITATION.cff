@@ -1,0 +1,8 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Rego Alvare
+    given-names: Ramiro
+title: "Software for automatic music classification"
+version: 0.0.1
+date-released: 2022-04-02

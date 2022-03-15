@@ -5,15 +5,14 @@ import shutil
 
 import matplotlib.pyplot as plt
 import numpy as np
-from numpy.core._exceptions import UFuncTypeError
-from scipy.io import wavfile
+import pyloudnorm as pyln
 import seaborn as sns
 import soundfile as sf
-import pyloudnorm as pyln
+from numpy.core._exceptions import UFuncTypeError
+from scipy.io import wavfile
 
 sns.set()
-sns.set(rc={'figure.figsize':(11.7,8.27)})
-
+sns.set(rc={'figure.figsize': (11.7, 8.27)})
 
 current_path = os.getcwd()
 data_path = os.path.join(current_path, 'data')
@@ -46,7 +45,7 @@ def music_visualizations(album):
 
         middle = round(len(signal_data)/2)
         half_width = int(1E4)
-        signal_data = signal_data [middle-half_width:middle+half_width,:]
+        signal_data = signal_data[middle - half_width:middle + half_width, :]
 
         data, rate = sf.read(song_full)
         meter = pyln.Meter(rate)  #
