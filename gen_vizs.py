@@ -24,9 +24,10 @@ root_dirs = []
 for root_dir in fullpaths:
     if os.path.isdir(root_dir): root_dirs.append(root_dir)
 
+
 def music_visualizations(album):
     wav_dir = os.path.join(album, 'wav')
-    image_dir = os.path.join(album,'png')
+    image_dir = os.path.join(album, 'png')
     audio_paths = os.listdir(wav_dir)
     try:
         shutil.rmtree(image_dir)
@@ -43,7 +44,7 @@ def music_visualizations(album):
         # Read the wav dir (mono)
         sampling_frequency, signal_data = wavfile.read(song_full)
 
-        middle = round(len(signal_data)/2)
+        middle = round(len(signal_data) / 2)
         half_width = int(1E4)
         signal_data = signal_data[middle - half_width:middle + half_width, :]
 
@@ -58,7 +59,7 @@ def music_visualizations(album):
         # Plot the signal read from wav dir
         plt.subplot(211)
         plt.title(song + ' [loudness: ' + str(loudness) + ']')
-        plt.plot(data) # we can use data or signal_data. TODO: investigate which one is better
+        plt.plot(data)  # we can use data or signal_data. TODO: investigate which one is better
         plt.xlabel('Sample')
         plt.ylabel('Amplitude')
 
@@ -74,9 +75,8 @@ def music_visualizations(album):
         try:
             plt.savefig(os.path.join(image_dir, song + '.png'))
         except UFuncTypeError as ufte:
-            print (ufte + ' ' + song)
+            print(ufte + ' ' + song)
 
 
 for root_dir in root_dirs:
     music_visualizations(root_dir)
-

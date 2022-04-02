@@ -1,49 +1,53 @@
-
 import os
-import shutil
+import sys
 
 from pydub import AudioSegment
 from pydub.exceptions import CouldntDecodeError
 
+import os_tools
+
 
 # convert all songs to wav files
-def convert_files(mp3_dir, wav_dir):
+def __convert_files(album_path):
+    album_mp3_path = os.path.join(album_path, 'mp3')
+    album_wav_path = os.path.join(album_path, 'wav')
+    os_tools.reset_dir(album_wav_path)
 
-    audio_paths = os.listdir(mp3_dir)
+    mp3_files = os.listdir(album_mp3_path)
 
-    # make the top level directory
-    try:
-        shutil.rmtree(wav_dir)
-    except OSError:
-        pass
-    try:
-        os.mkdir(wav_dir)
-    except OSError:
-        pass
+    for mp3_file_name in mp3_files:
 
-    for song in audio_paths:
+        mp3_file = os.path.join(album_mp3_path, mp3_file_name)
+        pre, ext = os.path.splitext(mp3_file)
+        if ext == '.mp3':
+            wav_file = os.path.join(album_wav_path, os.path.basename(pre) + '.wav')
 
-        song = os.path.join(mp3_dir, song)
-        pre, ext = os.path.splitext(song)
-        wav_song = os.path.join(wav_dir, os.path.basename(pre) + '.wav')
+            try:
+                sound = AudioSegment.from_mp3(mp3_file)
+                sound.export(wav_file, format='wav')
+            except CouldntDecodeError:
+                print('not convertible ' + mp3_file)
+            except IndexError:
+                print('not a mp3 file ' + mp3_file)
 
-        try:
-            sound = AudioSegment.from_mp3(song)
-            sound.export(wav_song, format="wav")
-        except CouldntDecodeError:
-            print ('not convertible ' + song)
-        except IndexError:
-            print ('problem with index ' + song)
 
 # detect the current working directory and print it
 current_path = os.getcwd()
-print ("The current working directory is %s" % current_path)
+print(f'The current working directory is {current_path}')
 
-# walk the data directory and convert all mp3
-for rootdir, dirs, files in os.walk(os.path.join(current_path, 'data')):
-    for album_path in dirs:
-        if album_path != 'wav':
-            album_path = os.path.join(rootdir, album_path)
-            album_wav_path = os.path.join(album_path, 'wav')
-            # convert every album
-            convert_files(album_path, album_wav_path)
+
+def convert_all(verbose=True):
+    # get my dir
+    data_dir = os.path.join(os.getcwd(), 'data')
+
+    # walk the data directory and convert all mp3
+    for album in os.listdir(data_dir):
+        album_path = os.path.join(data_dir, album)
+
+        # convert every album
+        __convert_files(album_path)
+
+
+convert_all(True)
+
+sys.exit(0)
