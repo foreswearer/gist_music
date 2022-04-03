@@ -21,4 +21,4 @@ def log(message, level):
     if level <= __level:
         now = datetime.now()
         current_time = now.strftime("%H:%M:%S")
-        print(f'{current_time} :Making Viz {message}')  # TODO refactor logging
+        print(f'{current_time}|> {message}')
