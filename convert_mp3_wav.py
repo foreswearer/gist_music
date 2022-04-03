@@ -33,10 +33,9 @@ def __convert_files(album_path):
 
 # detect the current working directory and print it
 current_path = os.getcwd()
-print(f'The current working directory is {current_path}')
 
 
-def convert_all(verbose=True):
+def convert_all():
     # get my dir
     data_dir = os.path.join(os.getcwd(), 'data')
 
@@ -48,6 +47,6 @@ def convert_all(verbose=True):
         __convert_files(album_path)
 
 
-convert_all(True)
+convert_all()
 
 sys.exit(0)
